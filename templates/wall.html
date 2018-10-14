@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+        crossorigin="anonymous">
+
+
+    <style>
+        .indended {
+            margin-left: 25px;
+        }
+
+        .container{
+            padding-top: 25px;
+        }
+        
+        span{
+            font-size: 12px;
+        }
+        
+        h6 {
+            text-decoration: underline;
+        }
+
+        h5{
+            color: white;
+            margin-right: 40px;
+        }
+        .msg-box{
+            width: 300px;
+            /* background-color: grey; */
+            margin: 0px 0px 40px 30px;
+        }
+        .msg-box p{
+            margin: 0px;
+        }
+        .msg-box span{
+            margin: 0px 50px 0px 30px;
+        }
+
+        .msg-send{
+            margin: 0px 0px 40px 0px;
+        }
+        
+        .msg-send p{
+            width: 80px;
+        }
+        .msg-send p, .msg-send input, .msg-send form{
+            display: inline-block;
+            vertical-align: top;
+        }
+        
+        .msg-send input{
+            height: 40px;
+            border: 1px solid rgb(20, 20, 20);
+            border-radius: 5px;
+        }
+    </style>
+    <title>Simple Wall</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand text-white">Welcome - {{ user['first_name']}}</a>
+        <a href="/logout" class="btn btn-danger">Logout</a>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                {% if messages_data[0].message %}
+                <h6>{{ count_received }} Message(s) for you (Michael)</h6>
+                {% for data in messages_data %}
+                <div class="msg-box">
+                    <p>{{ data.sender_name }} said (3 hours ago):</p>
+                    <span>"{{ data.message }}"</span>
+                    <a href="/delete/{{ data.message_id }}"><i class="fas fa-trash-alt"></i></a>
+                </div>
+                {% else %}
+                <h6>You have not message</h6>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <h1>Send a messages</h1>
+                <p>You have send 10 messages so far</p>
+                {% for data in other_users %}
+                <div class="msg-send">
+                    <p>{{ data.receiver_name }}</p>
+                    <form action="/send" method="POST">
+                        <input type="hidden" name="receiver_id" value="{{ data.receiver_id }}">
+                        <input type="text" class="form-group" name="message">
+                        <button class="btn-success" type="submit">Send</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
